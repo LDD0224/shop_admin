@@ -7,7 +7,7 @@
       </div>
       <div class="logout">
         <span>欢迎光临</span>
-        <a href="javascript:;">退出</a>
+        <a href="javascript:;" @click="logout">退出</a>
       </div>
     </el-header>
     <el-container>
@@ -19,7 +19,28 @@
 
 <script>
 export default {
-
+  // 提供logout方法
+  methods: {
+    logout() {
+      this.$confirm('你确定要退出系统吗?', '温馨提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 1. 删除localStorage中的myToken
+        localStorage.removeItem('token')
+        // 2. 跳转到登录组件
+        this.$router.push('login')
+        // 3. 给一个退出的提示
+        this.$message.success('退出成功了')
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '退出取消了'
+        })
+      })
+    }
+  }
 }
 </script>
 
