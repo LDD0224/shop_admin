@@ -30,7 +30,16 @@
         </template>
       </el-table-column>
     </el-table>
-
+    <!--
+      分页
+      @size-change: 表示每页的条数发生了改变
+      @current-change: 当前页发生改变
+      current-page: 指定当前页面
+      page-sizes: 指定选择每页条数的数组
+      page-size: 每页的条数
+      total:指定总条数
+      layout: 指定分页的空间 控制分页显示的顺序
+    -->
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
