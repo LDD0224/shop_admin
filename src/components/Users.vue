@@ -12,6 +12,19 @@
     </el-input>
     <el-button type="success" plain>添加用户</el-button>
     <!-- 表格组件 -->
+    <!--
+      el-table : 表格组件
+      data : 指定表格最终需要渲染的数据（数组）
+      style： 让表格宽度100%
+      el-table-column： 定义表格的每一列
+        label="日期"： 列的标题
+        prop： 对应显示的数据的属性名
+        width： 列的宽度 不支持百分比
+
+      在el-tabel中，如果想要自定义列模版
+      在el-table-column中使用template
+      <template slot-scope="scope">自己定义的内容</template>
+    -->
     <el-table :data="userList" style="width: 100%">
       <el-table-column prop="username" label="姓名" width="180"></el-table-column>
       <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
