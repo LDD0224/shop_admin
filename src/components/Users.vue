@@ -69,7 +69,7 @@
 
 <script>
 // 引入axios
-import axios from 'axios'
+// import axios from 'axios'
 export default {
   data() {
     return {
@@ -86,21 +86,22 @@ export default {
       // axios如果是get/delete请求，参数要么直接拼地址栏，要么放到params中
       // 如果post/put/patch请求，参数放到data中
       // 除了login请求，其他所有的接口都必须携带token， 要求设置给请求头：Authorization
-      axios({
+      this.axios({
         method: 'get',
-        url: 'http://localhost:8888/api/private/v1/users',
+        url: 'users',
         params: {
           query: this.query,
           pagenum: this.currentPage,
           pagesize: this.pageSize
-        },
-        headers: {
-          Authorization: localStorage.getItem('token')
         }
       }).then(res => {
-        if (res.data.meta.status === 200) {
-          this.userList = res.data.data.users
-          this.total = res.data.data.total
+        let {
+          meta: { status },
+          data: { users, total }
+        } = res
+        if (status === 200) {
+          this.userList = users
+          this.total = total
         }
       })
     },
@@ -123,25 +124,27 @@ export default {
       // console.log(id)
       this.$confirm('你确定要删除吗', '温馨提示', {
         type: 'wraning'
-      }).then(() => {
-        // 发送ajax请求，删除数据
-        axios({
-          method: 'delete',
-          url: `http://localhost:8888/api/private/v1/users/${id}`,
-          headers: {
-            Authorization: localStorage.getItem('token')
-          }
-        }).then(res => {
-          // 如果我们发现当前页只有一条数据了，应该current减1，渲染上一页
-          if (this.userList.length <= 1 && this.currentPage > 1) {
-            this.currentPage--
-          }
-          this.getUserList()
-          this.$message.success('恭喜你，成功删除了')
-        })
-      }).catch(() => {
-        this.$message.info('取消删除了')
       })
+        .then(() => {
+          // 发送ajax请求，删除数据
+          return this.axios({
+            method: 'delete',
+            url: `users/${id}`
+          })
+        })
+        .then(res => {
+          if (res.meta.status === 200) {
+            // 如果我们发现当前页只有一条数据了，应该current减1，渲染上一页
+            if (this.userList.length <= 1 && this.currentPage > 1) {
+              this.currentPage--
+            }
+            this.getUserList()
+            this.$message.success('成功删除了')
+          }
+        })
+        .catch(() => {
+          this.$message.info('取消删除了')
+        })
     }
   },
   created() {
