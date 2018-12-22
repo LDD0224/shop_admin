@@ -10,7 +10,7 @@
     <el-input placeholder="请输入内容" v-model="query" class="input-with-select">
       <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
     </el-input>
-    <el-button type="success" plain>添加用户</el-button>
+    <el-button type="success" plain @click="showAddDialog">添加用户</el-button>
     <!-- 表格组件 -->
     <!--
       el-table : 表格组件
@@ -32,12 +32,12 @@
       <el-table-column prop="mg_state" label="用户状态">
         <!-- 在自定义列模版中，如何访问到当前列的数据 -->
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          <el-switch @change="changeState(scope.row)" v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" plain size="mini"></el-button>
+          <el-button type="primary" icon="el-icon-edit" plain size="mini" @click="showEditDialog(scope.row)"></el-button>
           <el-button type="danger" icon="el-icon-delete" @click="delUser(scope.row.id)" plain size="mini"></el-button>
           <el-button type="success" icon="el-icon-check" plain size="mini">分配角色</el-button>
         </template>
@@ -64,6 +64,32 @@
       layout="total, sizes, prev, pager, next, jumper"
       >
     </el-pagination>
+    <!-- 添加用户的对话框 -->
+    <!--
+      el-dialog：整个对话框组件
+      visible： 对话框是否可见
+    -->
+    <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="40%">
+      <!-- 添加表单 -->
+      <el-form status-icon ref="addForm" :rules="rules" :model="addForm" label-width="80px">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="addForm.username" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="addForm.password" placeholder="请输入密码"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="addForm.email" placeholder="请输入邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="手机" prop="mobile">
+          <el-input v-model="addForm.mobile" placeholder="请输入手机"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="addUser">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -78,7 +104,29 @@ export default {
       query: '',
       currentPage: 1,
       pageSize: 2,
-      total: 0
+      total: 0,
+      // 控制添加用户的对话框的显示与隐藏
+      addDialogVisible: false,
+      addForm: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: ''
+      },
+      rules: {
+        username: [
+          {}
+        ],
+        password: [
+          {}
+        ],
+        email: [
+          {}
+        ],
+        mobile: [
+          {}
+        ]
+      }
     }
   },
   methods: {
@@ -145,6 +193,13 @@ export default {
         .catch(() => {
           this.$message.info('取消删除了')
         })
+    },
+    // 显示添加对话框
+    showAddDialog() {
+      this.addDialogVisible = true
+    },
+    addUser() {
+      // 1. 表单校验功能
     }
   },
   created() {
@@ -160,7 +215,7 @@ export default {
   margin-bottom: 5px;
   background-color: #d3d4dd;
 }
-.el-input {
+.input-with-select {
   width: 300px;
   margin-bottom: 5px;
 }
