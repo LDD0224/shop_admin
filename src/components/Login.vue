@@ -9,7 +9,7 @@
       表单校验
         1. 给el-form传入一个rules规则
         2. 要给el-form-item 添加一个prop属性，值就是字段名
-    -->>
+    -->
     <el-form status-icon ref="form" :rules="rules" :model="form" label-width="80px">
       <img src="@/assets/avatar.jpg" alt="">
       <el-form-item label="用户名" prop="username">

@@ -69,8 +69,8 @@
       el-dialog：整个对话框组件
       visible： 对话框是否可见
     -->
+    <!-- 添加表单 -->
     <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="40%">
-      <!-- 添加表单 -->
       <el-form status-icon ref="addForm" :rules="rules" :model="addForm" label-width="80px">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="addForm.username" placeholder="请输入用户名"></el-input>
@@ -90,8 +90,8 @@
         <el-button type="primary" @click="addUser">确定</el-button>
       </span>
     </el-dialog>
+    <!-- 修改表单 -->
     <el-dialog title="修改用户" :visible.sync="editDialogVisible" width="40%">
-      <!-- 修改表单 -->
       <el-form status-icon ref="editForm" :rules="rules" :model="editForm" label-width="80px">
         <el-form-item label="用户名">
           <el-tag type="info">{{editForm.username}}</el-tag>
