@@ -115,16 +115,18 @@ export default {
       },
       rules: {
         username: [
-          {}
+          { required: true, message: '用户名不能为空', trigger: 'blur' },
+          { min: 3, max: 9, message: '用户长度在 3 到 9 个字符', trigger: 'blur' }
         ],
         password: [
-          {}
+          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { min: 6, max: 12, message: '用户长度在 6 到 12 个字符', trigger: 'blur' }
         ],
         email: [
-          {}
+          { type: 'email', message: '请输入一个合法的邮箱', trigger: 'blur' }
         ],
         mobile: [
-          {}
+          { pattern: /^1\d{10}$/, message: '请输入一个合法的手机号', trigger: 'blur' }
         ]
       }
     }
@@ -200,6 +202,31 @@ export default {
     },
     addUser() {
       // 1. 表单校验功能
+      this.$refs.addForm.validate(valid => {
+        if (!valid) return false
+        // 2. 发送ajax请求添加数据
+        this.axios({
+          method: 'post',
+          url: 'users',
+          data: this.addForm
+        }).then(res => {
+          let { meta: { status, msg } } = res
+          if (status === 201) {
+            this.total++
+            this.currentPage = Math.ceil(this.total / this.pageSize)
+            // 3. 重新渲染
+            this.getUserList()
+            // 4. 重置表单样式
+            this.$refs.addForm.resetFields()
+            // 5. 隐藏模态框
+            this.addDialogVisible = false
+            // 6. 提示信息
+            this.$message.success('添加成功了')
+          } else {
+            this.$message.error(msg)
+          }
+        })
+      })
     }
   },
   created() {
