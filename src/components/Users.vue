@@ -262,8 +262,29 @@ export default {
       this.editForm.mobile = row.mobile
     },
     updateUser() {
+      // 1. 表单校验功能
       this.$refs.editForm.validate(valid => {
         if (!valid) return false
+        // 2. 发送ajax请求添加数据
+        this.axios({
+          method: 'put',
+          url: `users/${this.editForm.id}`,
+          data: this.editForm
+        }).then(res => {
+          let { meta: { status } } = res
+          if (status === 200) {
+            // 3. 重新渲染
+            this.getUserList()
+            // 4. 重置表单样式
+            this.$refs.editForm.resetFields()
+            // 5. 隐藏模态框
+            this.editDialogVisible = false
+            // 6. 提示信息
+            this.$message.success('修改成功了')
+          } else {
+            this.$message.error('服务器异常')
+          }
+        })
       })
     }
   },
