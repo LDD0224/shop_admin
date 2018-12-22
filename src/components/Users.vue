@@ -90,6 +90,24 @@
         <el-button type="primary" @click="addUser">确定</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="修改用户" :visible.sync="editDialogVisible" width="40%">
+      <!-- 修改表单 -->
+      <el-form status-icon ref="editForm" :rules="rules" :model="editForm" label-width="80px">
+        <el-form-item label="用户名">
+          <el-tag type="info">{{editForm.username}}</el-tag>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="editForm.email" placeholder="请输入邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="手机" prop="mobile">
+          <el-input v-model="editForm.mobile" placeholder="请输入手机"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="updateUser">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -128,6 +146,13 @@ export default {
         mobile: [
           { pattern: /^1\d{10}$/, message: '请输入一个合法的手机号', trigger: 'blur' }
         ]
+      },
+      editDialogVisible: false,
+      editForm: {
+        id: '',
+        username: '',
+        email: '',
+        mobile: ''
       }
     }
   },
@@ -226,6 +251,19 @@ export default {
             this.$message.error(msg)
           }
         })
+      })
+    },
+    showEditDialog(row) {
+      // 显示对话框
+      this.editDialogVisible = true
+      this.editForm.id = row.id
+      this.editForm.username = row.username
+      this.editForm.email = row.email
+      this.editForm.mobile = row.mobile
+    },
+    updateUser() {
+      this.$refs.editForm.validate(valid => {
+        if (!valid) return false
       })
     }
   },
