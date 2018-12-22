@@ -16,7 +16,7 @@
         <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password" placeholder="请输入密码"></el-input>
+        <el-input v-model="form.password" type="password" placeholder="请输入密码" @keyup.enter.native="login"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="login">登录</el-button>
@@ -65,14 +65,17 @@ export default {
           // 发送ajax请求，进行登录
           axios({
             method: 'post',
-            url: 'http://localhost:8888/api/private/v1/login',
+            url: 'login',
             data: this.form
           }).then(res => {
-            // console.log(res.data)
-            if (res.data.meta.status === 200) {
+            let {
+              meta: {status, msg},
+              data: {token}
+            } = res
+            if (status === 200) {
               this.$message.success('登录成功')
               // 把后台颁发的token存起来
-              localStorage.setItem('token', res.data.data.token)
+              localStorage.setItem('token', token)
               // 跳转到Home组件
               // 参数：跳转的路径
               // 类似于location.href
@@ -80,7 +83,7 @@ export default {
             } else {
               // 失败的消息  this.$message: 弹出一个消息提示
               this.$message({
-                message: res.data.meta.msg,
+                message: msg,
                 type: 'error',
                 duration: 1000
               })
