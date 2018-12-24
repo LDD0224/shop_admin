@@ -221,6 +221,18 @@ export default {
           this.$message.info('取消删除了')
         })
     },
+    async changeState({ id, mg_state: mgState }) {
+      // console.log(user)
+      let res = await this.axios({
+        method: 'put',
+        url: `users/${id}/state/${mgState}`
+      })
+      if (res.meta.status === 200) {
+        this.$message.success('状态修改成功了')
+      } else {
+        this.$message.error('状态修改失败了')
+      }
+    },
     // 显示添加对话框
     showAddDialog() {
       this.addDialogVisible = true
