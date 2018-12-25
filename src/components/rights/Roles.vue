@@ -99,18 +99,20 @@ export default {
       }
     },
     async showAssignDialog(role) {
-      // 显示对话框
+      // 0. 存储了需要分配的角色id
       this.roleId = role.id
+      // 1. 显示对话框
       this.assignDialogVisible = true
-      // 发送ajax请求，获取到所有的权限的数据， 树状
+      // 2. 发送ajax请求，获取到所有的权限的数据， 树状
       let res = await this.axios.get('rights/tree')
       let { meta: { status }, data } = res
       if (status === 200) {
         this.data = data
         // console.log(this.data)
       }
-      // 让节点选中
-      // 找到当前角色有拥有的所有的三级权限
+      // 3. 使用树形菜单把数据显示出来
+      // 4. 默认选中， 如何让节点默认选中
+      // 4.1 找到当前角色有拥有的所有的三级权限
       let ids = []
       role.children.forEach(l1 => {
         l1.children.forEach(l2 => {
