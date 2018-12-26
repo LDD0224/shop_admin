@@ -18,7 +18,7 @@
       <el-table-column label="排序" prop="cat_level"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="{row}">
-          <el-button type="primary" icon="el-icon-edit" plain size="mini"></el-button>
+          <el-button type="primary" icon="el-icon-edit" plain size="mini" ></el-button>
           <el-button type="danger" icon="el-icon-delete" plain size="mini" @click="delCategory(row)"></el-button>
         </template>
       </el-table-column>
@@ -131,6 +131,7 @@ export default {
     addCategory() {
       this.$refs.addForm.validate(async valid => {
         if (!valid) return false
+
         // 发送ajax请求  cat_name  cat_pid  cat_level
         let {cat_pid: catPid, cat_name: catName} = this.addForm
         let res = await this.axios.post('categories', {
