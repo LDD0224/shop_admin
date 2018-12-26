@@ -22,8 +22,8 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
     <!--
-      分页
       @size-change: 表示每页的条数发生了改变，会触发handleSizeChange
       @current-change: 当前页发生改变
       current-page: 指定当前页面
@@ -36,7 +36,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
-      :page-sizes="[2, 4, 6, 8]"
+      :page-sizes="[2, 4, 6, 8, 10]"
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
