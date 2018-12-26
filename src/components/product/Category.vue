@@ -8,6 +8,7 @@
         childKey: 查找子属性的属性名  默认是children
         parentKey: 指定父节点的id值  如果不设置，那么节点找不到爹，没办法缩起来
         levelKey: 指定节点的深度，级别
+        indent-size:指定缩进
       -->
       <!-- 每一列 -->
       <el-table-tree-column label="分类名称" prop="cat_name" tree-key="cat_id" parent-key="cat_pid" level-key="cat_level" :indentSize="20"></el-table-tree-column>
@@ -18,7 +19,7 @@
       <el-table-column label="操作">
         <template slot-scope="{row}">
           <el-button type="primary" icon="el-icon-edit" plain size="mini"></el-button>
-          <el-button type="danger" icon="el-icon-delete" plain size="mini"></el-button>
+          <el-button type="danger" icon="el-icon-delete" plain size="mini" @click="delCategory(row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -36,7 +37,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
-      :page-sizes="[2, 4, 6, 8, 10]"
+      :page-sizes="[10, 20, 30, 40]"
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
@@ -98,31 +99,29 @@ export default {
           pagesize: this.pageSize
         }
       })
-      let {meta: {status}, data: {result, total}} = res
+      let {
+        meta: {status},
+        data: {result, total}
+      } = res
       if (status === 200) {
         this.total = total
         this.categoryList = result
         // console.log(this.categoryList)
       }
     },
+    // 修改了每页的条数
     handleSizeChange(val) {
-      // 修改this.pageSize
       this.pageSize = val
-      this.getCategoryList()
-    },
-    handleCurrentChange(val) {
-      // 把currentPage修改成val
-      this.currentPage = val
-      this.getCategoryList()
-    },
-    search() {
-      // 搜索的时候，把当前页第一页
       this.currentPage = 1
+      this.getCategoryList()
+    },
+    // 修改了当前页的页码
+    handleCurrentChange(val) {
+      this.currentPage = val
       this.getCategoryList()
     },
     async showAddDialog() {
       this.addDialogVisible = true
-
       // 加载商品的分类数据（2级）
       let res = await this.axios.get('categories?type=2')
       if (res.meta.status === 200) {
@@ -132,7 +131,6 @@ export default {
     addCategory() {
       this.$refs.addForm.validate(async valid => {
         if (!valid) return false
-
         // 发送ajax请求  cat_name  cat_pid  cat_level
         let {cat_pid: catPid, cat_name: catName} = this.addForm
         let res = await this.axios.post('categories', {
@@ -141,12 +139,28 @@ export default {
           cat_level: catPid.length
         })
         if (res.meta.status === 201) {
-          this.getCategoryList()
-          this.$message.success('添加成功了')
           this.addDialogVisible = false
           this.$refs.addForm.resetFields()
+          this.getCategoryList()
+          this.$message.success('添加成功了')
         }
       })
+    },
+    // 删除商品分类
+    async delCategory(row) {
+      try {
+        await this.$confirm('你确定要删除吗', '温馨提示', {
+          type: 'warning'
+        })
+        // 发送ajax请求，删除数据
+        let res = await this.axios.delete(`categories/${row.cat_id}`)
+        if (res.meta.status === 200) {
+          this.getCategoryList()
+          this.$message.success('删除成功了')
+        }
+      } catch (e) {
+        this.$message.info('删除取消了')
+      }
     }
   },
   created() {

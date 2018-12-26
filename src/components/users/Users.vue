@@ -244,10 +244,10 @@ export default {
             this.currentPage--
           }
           this.getUserList()
-          this.$message.success('恭喜你，删除成功了')
+          this.$message.success('删除成功了')
         }
       } catch (e) {
-        this.$message.info('取消删除了')
+        this.$message.info('删除取消了')
       }
     },
     async changeState({ id, mg_state: mgState }) {
