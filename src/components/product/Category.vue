@@ -22,6 +22,26 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--
+      分页
+      @size-change: 表示每页的条数发生了改变，会触发handleSizeChange
+      @current-change: 当前页发生改变
+      current-page: 指定当前页面
+      page-sizes: 指定选择每页条数的数组
+      page-size: 每页的条数
+      total:指定总条数
+      layout: 指定分页的空间
+    -->
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[2, 4, 6, 8]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      background
+    ></el-pagination>
     <!-- 添加表单 -->
     <el-dialog title="添加分类" :visible.sync="addDialogVisible" width="40%">
       <el-form ref="addForm" :model="addForm" label-width="80px" :rules="rules" status-icon>
@@ -84,6 +104,21 @@ export default {
         this.categoryList = result
         // console.log(this.categoryList)
       }
+    },
+    handleSizeChange(val) {
+      // 修改this.pageSize
+      this.pageSize = val
+      this.getCategoryList()
+    },
+    handleCurrentChange(val) {
+      // 把currentPage修改成val
+      this.currentPage = val
+      this.getCategoryList()
+    },
+    search() {
+      // 搜索的时候，把当前页第一页
+      this.currentPage = 1
+      this.getCategoryList()
     },
     async showAddDialog() {
       this.addDialogVisible = true
