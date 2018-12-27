@@ -2,7 +2,7 @@
   <div class="category">
     <el-button type="success" @click="showAddDialog" plain>商品分类</el-button>
     <!-- 表格组件显示权限数据 -->
-    <el-table :data="categoryList">
+    <el-table :data="categoryList" v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0.8)">
       <!--
         tree-key: 嵌套解析的key 默认id
         childKey: 查找子属性的属性名  默认是children
@@ -86,12 +86,14 @@ export default {
         cat_name: [
           { required: true, message: '请输入分类名称', trigger: 'blur' }
         ]
-      }
+      },
+      loading: false
     }
   },
   methods: {
     // 获取商品分类列表
     async getCategoryList() {
+      this.loading = true
       let res = await this.axios.get('categories', {
         params: {
           type: 3,
@@ -107,12 +109,16 @@ export default {
         this.total = total
         this.categoryList = result
         // console.log(this.categoryList)
+        setTimeout(() => {
+          this.total = total
+          this.categoryList = result
+          this.loading = false
+        }, 500)
       }
     },
     // 修改了每页的条数
     handleSizeChange(val) {
       this.pageSize = val
-      this.currentPage = 1
       this.getCategoryList()
     },
     // 修改了当前页的页码
