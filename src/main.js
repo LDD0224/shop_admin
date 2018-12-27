@@ -9,6 +9,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/base.less'
 // 导入axios
 import axios from 'axios'
+// 导入moment
+import moment from 'moment'
 
 // 使用element-tree-grid
 // 1. 引入
@@ -45,6 +47,11 @@ axios.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+// 定义一个时间过滤器
+Vue.filter('dateFilter', (input, format = 'YYYY-MM-DD HH:mm:ss') => {
+  return moment(input * 1000).format(format)
+})
 
 // 安装elementui插件
 Vue.use(ElementUI)
