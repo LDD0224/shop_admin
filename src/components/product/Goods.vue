@@ -13,7 +13,7 @@
       <el-table-column label="操作">
         <template slot-scope="{row}">
           <el-button type="primary" icon="el-icon-edit" size="mini" plain></el-button>
-          <el-button type="danger" icon="el-icon-delete" size="mini" plain></el-button>
+          <el-button type="danger" icon="el-icon-delete" size="mini" plain @click="delGood(row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -58,7 +58,7 @@ export default {
       if (status === 200) {
         this.goodList = goods
         this.total = total
-        // console.log(this.goodList)
+        console.log(this.goodList)
       }
     },
     indexMethod(index) {
@@ -71,6 +71,22 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val
       this.getGoodList()
+    },
+    // 删除商品分类
+    async delGood(row) {
+      try {
+        await this.$confirm('你确定要删除吗', '温馨提示', {
+          type: 'warning'
+        })
+        // 发送ajax请求，删除数据
+        let res = await this.axios.delete(`goods/${row.goods_id}`)
+        if (res.meta.status === 200) {
+          this.getGoodList()
+          this.$message.success('删除成功了')
+        }
+      } catch (e) {
+        this.$message.info('删除取消了')
+      }
     }
   },
   created() {
