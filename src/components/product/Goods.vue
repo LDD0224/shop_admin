@@ -58,7 +58,7 @@ export default {
       if (status === 200) {
         this.goodList = goods
         this.total = total
-        console.log(this.goodList)
+        // console.log(this.goodList)
       }
     },
     indexMethod(index) {
