@@ -17,6 +17,17 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      background>
+    </el-pagination>
   </div>
 </template>
 
@@ -52,6 +63,14 @@ export default {
     },
     indexMethod(index) {
       return index + 1 + (this.currentPage - 1) * this.pageSize
+    },
+    handleSizeChange(val) {
+      this.pageSize = val
+      this.getGoodList()
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.getGoodList()
     }
   },
   created() {

@@ -12,11 +12,20 @@ import axios from 'axios'
 // 导入moment
 import moment from 'moment'
 
+// 导入vue-quill-editor
+import VueQuillEditor from 'vue-quill-editor'
+// 导入样式文件
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
 // 使用element-tree-grid
 // 1. 引入
 import ElTreeGrid from 'element-tree-grid'
 // 2. 注册为全局的组件 el-table-tree-column支持el-table-column所有属性
 Vue.component('el-table-tree-column', ElTreeGrid)
+
+Vue.use(VueQuillEditor)
 
 // 把axios绑定给vue的原型
 Vue.prototype.axios = axios
