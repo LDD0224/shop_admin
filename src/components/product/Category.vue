@@ -2,7 +2,7 @@
   <div class="category">
     <el-button type="success" @click="showAddDialog" plain>商品分类</el-button>
     <!-- 表格组件显示权限数据 -->
-    <el-table :data="categoryList" v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0.8)">
+    <el-table :data="categoryList" v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255,255, 255, 0.8)">
       <!--
         tree-key: 嵌套解析的key 默认id
         childKey: 查找子属性的属性名  默认是children
