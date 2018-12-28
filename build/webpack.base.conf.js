@@ -38,6 +38,14 @@ module.exports = {
       'components': resolve('src/components')
     }
   },
+  externals: {
+    // vue是一个外部扩展, 导入vue的时候会直接去全局变量中找vue
+    vue: 'Vue',
+    'vue-router': 'VueRouter',
+    axios: 'axios',
+    moment: 'moment',
+    'element-ui': 'ELEMENT'
+  },
   module: {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),
